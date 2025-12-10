@@ -8,14 +8,12 @@ import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import AdminDashboard from './components/AdminDashboard';
 import './index.css';
-import { reportWebVitals } from './utils/webVitals';
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
-  // Chama Web Vitals quando o App monta
-  reportWebVitals();
-
   return (
     <>
+      <SpeedInsights />
       <Header />
       <Hero />
       <Servicos />
@@ -24,8 +22,7 @@ function App() {
       <Contato />
       <Footer />
       <WhatsAppFloat />
-      {/* AdminDashboard deve ser protegido, renderize apenas se estiver logado */}
-      {/* <AdminDashboard /> */}
+      <AdminDashboard />
     </>
   );
 }
