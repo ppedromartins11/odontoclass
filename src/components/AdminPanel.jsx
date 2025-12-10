@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { X, Plus, Edit2, Trash2, Eye, EyeOff } from 'lucide-react';
+import { X, Plus, Edit2, Trash2, Eye, EyeOff, Loader } from 'lucide-react';
+import { uploadToCloudinary, isUsingCloudinary } from '../utils/cloudinary';
 
 export default function AdminPanel() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +10,7 @@ export default function AdminPanel() {
   const [especializacoes, setEspecializacoes] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ nome: '', descricao: '', imagem: '', ano: new Date().getFullYear() });
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const ADMIN_PASSWORD = 'adrieli2024';
 
@@ -31,14 +33,24 @@ export default function AdminPanel() {
     }
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, imagem: reader.result });
-      };
-      reader.readAsDataURL(file);
+      // Validar tamanho (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Arquivo muito grande! Máximo 5MB');
+        return;
+      }
+
+      setIsUploadingImage(true);
+      try {
+        const imageUrl = await uploadToCloudinary(file);
+        setFormData({ ...formData, imagem: imageUrl });
+      } catch (error) {
+        alert('Erro ao fazer upload da imagem: ' + error.message);
+      } finally {
+        setIsUploadingImage(false);
+      }
     }
   };
 
@@ -188,9 +200,16 @@ export default function AdminPanel() {
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  className="w-full"
+                  disabled={isUploadingImage}
+                  className="w-full disabled:opacity-50"
                 />
-                {formData.imagem && (
+                {isUploadingImage && (
+                  <div className="mt-4 flex items-center gap-2 text-gray-600">
+                    <Loader size={20} className="animate-spin" />
+                    <span>Enviando imagem...</span>
+                  </div>
+                )}
+                {formData.imagem && !isUploadingImage && (
                   <div className="mt-4">
                     <p className="text-sm text-gray-600 mb-2">Preview:</p>
                     <img src={formData.imagem} alt="Preview" className="h-32 rounded-lg object-cover" />
@@ -201,7 +220,8 @@ export default function AdminPanel() {
               <div className="flex gap-2">
                 <button
                   onClick={handleSave}
-                  className="flex-1 bg-[#ff8da1] text-white py-2 rounded-lg hover:bg-[#ff7a94] transition font-semibold flex items-center justify-center gap-2"
+                  disabled={isUploadingImage}
+                  className="flex-1 bg-[#ff8da1] text-white py-2 rounded-lg hover:bg-[#ff7a94] transition font-semibold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Plus size={20} />
                   {editingId ? 'Atualizar' : 'Adicionar'}

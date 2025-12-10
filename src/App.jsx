@@ -7,6 +7,7 @@ import Contato from './components/Contato';
 import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import AdminDashboard from './components/AdminDashboard';
+import AdminSobreDra from './components/AdminSobreDra';
 import './index.css';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -23,6 +24,7 @@ function App() {
       <Footer />
       <WhatsAppFloat />
       <AdminDashboard />
+      <AdminSobreDra />
     </>
   );
 }
