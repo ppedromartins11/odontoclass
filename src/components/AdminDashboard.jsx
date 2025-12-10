@@ -15,6 +15,7 @@ import {
   CheckCircle,
   AlertCircle,
 } from 'lucide-react';
+import { uploadToCloudinary } from '../utils/cloudinary';
 
 export default function AdminDashboard() {
   const [isOpen, setIsOpen] = useState(false);
@@ -168,14 +169,17 @@ export default function AdminDashboard() {
     certificacoes: [],
   });
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e, fieldName = 'imagem') => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, imagem: reader.result });
-      };
-      reader.readAsDataURL(file);
+      try {
+        mostrarMensagem('Fazendo upload da imagem...', 'warning');
+        const imageUrl = await uploadToCloudinary(file);
+        setFormData({ ...formData, [fieldName]: imageUrl });
+        mostrarMensagem('Imagem carregada com sucesso!');
+      } catch (error) {
+        mostrarMensagem('Erro ao fazer upload da imagem', 'error');
+      }
     }
   };
 
@@ -585,16 +589,7 @@ export default function AdminDashboard() {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              setFormData({ ...formData, imagem: reader.result });
-                            };
-                            reader.readAsDataURL(file);
-                          }
-                        }}
+                        onChange={handleImageUpload}
                         className="w-full"
                       />
                       {formData.imagem && (
@@ -787,16 +782,7 @@ export default function AdminDashboard() {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              setFormData({ ...formData, foto: reader.result });
-                            };
-                            reader.readAsDataURL(file);
-                          }
-                        }}
+                        onChange={(e) => handleImageUpload(e, 'foto')}
                         className="w-full"
                       />
                       {formData.foto && (
