@@ -8,8 +8,12 @@ import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import AdminDashboard from './components/AdminDashboard';
 import './index.css';
+import { reportWebVitals } from './utils/webVitals';
 
 function App() {
+  // Chama Web Vitals quando o App monta
+  reportWebVitals();
+
   return (
     <>
       <Header />
@@ -20,7 +24,8 @@ function App() {
       <Contato />
       <Footer />
       <WhatsAppFloat />
-      <AdminDashboard />
+      {/* AdminDashboard deve ser protegido, renderize apenas se estiver logado */}
+      {/* <AdminDashboard /> */}
     </>
   );
 }
