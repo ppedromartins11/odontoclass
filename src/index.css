@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --color-rosa: #ff8da1;
+  --color-texto: #5A5755;
+  --color-fundo: #FDF8F4;
+  --color-whatsapp: #25D366;
+  --color-rosa-light: rgba(231, 111, 127, 0.1);
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white;
+  }
+
+  .section-container {
+    @apply max-w-6xl mx-auto px-4 py-12 md:py-16 lg:py-20;
+  }
+
+  .card-base {
+    @apply bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow;
+  }
+
+  .text-rosa {
+    color: var(--color-rosa);
+  }
+
+  .text-texto {
+    color: var(--color-texto);
+  }
+
+  .bg-rosa-light {
+    background-color: var(--color-rosa-light);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-fundo);
+  color: var(--color-texto);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    transition: none !important;
+    animation: none !important;
+  }
+}
